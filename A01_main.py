@@ -4,7 +4,7 @@ the BankAccount and Client classes.
 """
 __author__ = "ACE Faculty"
 __version__ = "1.0.0"
-__credits__ = ""
+__credits__ = "Krish Malhotra"
 
 from bank_account.bank_account import BankAccount
 from client.client import Client
