@@ -1,4 +1,4 @@
-from .bank_account import BankAccount, _money
+from .bank_account import BankAccount, _fmt_currency
 
 class ChequingAccount(BankAccount):
     """
