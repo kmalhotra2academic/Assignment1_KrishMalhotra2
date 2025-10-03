@@ -1,4 +1,10 @@
 """
+Changes from A01 → A02 (BankAccount)**
+- Made `BankAccount` an **abstract base class**.
+- Added protected `self._date_created: date` with validation (defaults to `date.today()` if not a `date`).
+- Declared abstract `get_service_charges()` to force subclass polymorphism.
+- Kept deposit/withdraw/update_balance and `__str__` (unchanged formatting).
+Abstract superclass for all bank accounts.
 BankAccount class (Part3)
 - Private attributes:
     __account_number : int
@@ -7,11 +13,30 @@ BankAccount class (Part3)
 - Properties (read-only) for each attribute
 - update_balance(amount): adds to balance if numeric
 """
+from __future__ import annotations
+from abc import ABC, abstractmethod
+from datetime import date
+from typing import Any 
+
 
 def _fmt_currency(x: float) -> str:
+    """Return `x` formatted as currency with two decimals."""
     return f"${x:,.2f}"
 
-class BankAccount:
+class BankAccount(ABC):
+    """Abstract bank account.
+
+
+        Attributes
+        ----------
+        BASE_SERVICE_CHARGE : float
+        Flat fee used by subclasses while computing service charges.
+        _date_created : date (protected)
+        Creation date for the account. Defaults to `date.today()` if invalid input.
+        __account_number, __client_number, __balance : private
+        Core identifiers and current balance.
+        """
+    BASE_SERVICE_CHARGE: float = 0.50
     def __init__(self, account_number: int, client_number: int, balance: float) -> None:
         if not isinstance(account_number, int):
             raise ValueError("Account number must be an integer.")
@@ -67,3 +92,9 @@ class BankAccount:
 
     def __str__(self) -> str:
         return f"Account Number: {self.__account_number} Balance: {_fmt_currency(self.__balance)}\n"
+    
+    #added abstract method for service charges
+    @abstractmethod
+    def get_service_charges(self) -> float:
+        #Return the account's service charges.      
+        pass
