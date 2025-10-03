@@ -5,7 +5,18 @@ This project will be developed over the course of several assignments.  Each ass
 Krish Malhotra
 
 ## Assignment
-Assignment 2: Creating branch for assignment 2.
+## Assignment
+
+Assignment 1: BankAccount and Client Classes  
+- Implemented Client with private attributes and read-only properties.  
+- Implemented BankAccount with deposit, withdraw, and balance validation.  
+- Created A01_main.py driver program and basic unit tests.  
+
+Assignment 2: Extending Bank Accounts  
+- Added ChequingAccount, SavingsAccount, and InvestmentAccount subclasses.  
+- Implemented new behaviors (withdrawal fees, minimum balance, interest).  
+- Added corresponding unit test files.    
+- Updated Git workflow to use a feature branch for this stage.
 
 ## Encapsulation
 Both classes use attributes with read-only properties to protect state.
