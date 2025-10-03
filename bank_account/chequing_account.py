@@ -23,7 +23,7 @@ class ChequingAccount(BankAccount):
 
     def __str__(self) -> str:
         top = super().__str__().rstrip("\n")
-        limit = _money(self.__overdraft_limit)
+        limit = _fmt_currency(self.__overdraft_limit)
         rate_pct = f"{self.__overdraft_rate * 100:.2f}%"
         extra = f"Overdraft Limit: {limit} Overdraft Rate: {rate_pct} Account Type: Chequing"
         return top + "\n" + extra + "\n"
