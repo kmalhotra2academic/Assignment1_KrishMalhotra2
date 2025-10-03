@@ -4,7 +4,7 @@ the BankAccount sub classes.
 """
 __author__ = "ACE Faculty"
 __version__ = "1.0.0"
-__credits__ = ""
+__credits__ = "Krish Malhotra"
 
 # 1.  Import all BankAccount types using the bank_account package
 #     Import date from datetime
