@@ -1,19 +1,17 @@
-from patterns.observer.observer import Observer
+from .observer import Observer
 
 class Subject:
     """
     Subject base class.
 
     Purpose:
-        Keeps a list of observers and provides three simple operations:
-        attach, detach, and notify.
+        Manage a list of observers and provide attach, detach, and notify.
 
-    Attributes:
-        _observers (list[Observer]): Registered listeners.
+    
     """
     def __init__(self) -> None:
         """Start with an empty list of observers."""
-        self._observers: list[Observer] = []
+        self._observers = []
 
     def attach(self, observer: Observer) -> None:
         """Register an observer if it's not already attached."""
@@ -27,10 +25,12 @@ class Subject:
 
     def notify(self, message: str) -> None:
         """
-        Errors:
-            If an observer raises during update, we skip it so others still run.
+        Send `message` to all observers.
+
+        Notes:
+            A failing observer will be skipped so others still receive updates.
         """
-        for obs in self._observers:
+        for obs in list(self._observers):
             try:
                 obs.update(message)
             except Exception:
