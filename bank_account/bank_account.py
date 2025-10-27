@@ -17,13 +17,14 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from datetime import date
 from typing import Any 
+from patterns.observer.subject import Subject
 
 
 def _fmt_currency(x: float) -> str:
     """Return `x` formatted as currency with two decimals."""
     return f"${x:,.2f}"
 
-class BankAccount(ABC):
+class BankAccount(Subject, ABC):
     """Abstract bank account.
 
 
@@ -37,7 +38,9 @@ class BankAccount(ABC):
         Core identifiers and current balance.
         """
     BASE_SERVICE_CHARGE: float = 0.50
-    def __init__(self, account_number: int, client_number: int, balance: float) -> None:
+    LARGE_TRANSACTION_THRESHOLD: float = 9_999.99
+    LOW_BALANCE_LEVEL: float = 50.0
+    def __init__(self, account_number: int, client_number: int, balance: float, date_created: date) -> None:
         if not isinstance(account_number, int):
             raise ValueError("Account number must be an integer.")
         if not isinstance(client_number, int):
@@ -51,6 +54,7 @@ class BankAccount(ABC):
         self.__account_number = account_number
         self.__client_number = client_number
         self.__balance = bal
+        self._date_created: date = date_created if isinstance(date_created, date) else date.today()
 
     @property
     def account_number(self) -> int:
@@ -79,6 +83,12 @@ class BankAccount(ABC):
         self.update_balance(amt)
 
     def withdraw(self, amount: float) -> None:
+        """
+        Withdraw a positive amount not exceeding the current balance.
+
+        Raises:
+            ValueError: if amount is non-numeric, not positive, or exceeds balance.
+            """
         if not isinstance(amount, (int, float)):
             raise ValueError(f"Withdraw amount: {amount} must be numeric.")
         amt = float(amount)
@@ -89,6 +99,9 @@ class BankAccount(ABC):
                 f"Withdraw amount: {_fmt_currency(amt)} must not exceed the account balance: {_fmt_currency(self.__balance)}."
             )
         self.update_balance(-amt)
+
+        if self.__balance < BankAccount.LOW_BALANCE_LEVEL:
+            self.notify(f"Low balance alert on account #{self.__account_number}: {_fmt_currency(self.__balance)} remaining.")
 
     def __str__(self) -> str:
         return f"Account Number: {self.__account_number} Balance: {_fmt_currency(self.__balance)}\n"
