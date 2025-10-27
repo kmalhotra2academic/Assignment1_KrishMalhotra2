@@ -15,6 +15,9 @@ Assignment 2: Extending Bank Accounts
 - Implemented new behaviors (withdrawal fees, minimum balance, interest).  
 - Added corresponding unit test files.    
 - Updated Git workflow to use a feature branch for this stage.
+Assignment 3:  Strategy Pattern
+
+The Strategy Pattern lets each account type decide its own way of calculating service charges. Instead of putting the rules directly in the account classes, each account uses a separate strategy — like Overdraft, Minimum Balance, or Management Fee — to handle its fees. This keeps the code simple, flexible, and easy to update if bank policies change.
 
 ## Encapsulation
 Both classes use attributes with read-only properties to protect state.
