@@ -1,16 +1,22 @@
 from .bank_account import BankAccount, _fmt_currency
+from patterns.strategy.overdraft_strategy import OverdraftStrategy
 
 class ChequingAccount(BankAccount):
     """
-    ChequingAccount (A02):
-    - overdraft_limit and overdraft_rate (private)
-    - __str__ prints limit (currency), rate (percent), and account type
-    - get_service_charges: base if balance >= overdraft_limit,
-      else base + (overdraft_limit - balance) * overdraft_rate
+    Chequing account that calculates service charges using OverdraftStrategy.
+
+    Rules (Strategy):
+        - If balance >= overdraft_limit → base fee
+        - Else → base fee + (overdraft_limit - balance) * overdraft_rate
+
+    Notes:
+        The base fee is defined in the strategy layer, not in BankAccount.
     """
 
-    def __init__(self, account_number: int, client_number: int, balance: float, date_created,
-                 overdraft_limit, overdraft_rate):
+    def __init__(self, account_number: int, client_number: int, balance: float, date_created, overdraft_limit, overdraft_rate):  
+        """
+        Initialize the chequing account and wire up the overdraft strategy.
+        """
         super().__init__(account_number, client_number, balance, date_created)
         try:
             self.__overdraft_limit = float(overdraft_limit)
@@ -21,6 +27,10 @@ class ChequingAccount(BankAccount):
         except Exception:
             self.__overdraft_rate = 0.05
 
+         # Strategy object used to compute fees
+        self.__strategy = OverdraftStrategy(self.__overdraft_limit, self.__overdraft_rate)
+
+
     def __str__(self) -> str:
         top = super().__str__().rstrip("\n")
         limit = _fmt_currency(self.__overdraft_limit)
@@ -29,7 +39,5 @@ class ChequingAccount(BankAccount):
         return top + "\n" + extra + "\n"
 
     def get_service_charges(self) -> float:
-        if self.balance >= self.__overdraft_limit:
-            return BankAccount.BASE_SERVICE_CHARGE
-        return BankAccount.BASE_SERVICE_CHARGE + (self.__overdraft_limit - self.balance) * self.__overdraft_rate
+        return self.__strategy.calculate_service_charges(self)
         #Return the account's service charges.
