@@ -19,6 +19,13 @@ Assignment 3:  Strategy Pattern
 
 The Strategy Pattern lets each account type decide its own way of calculating service charges. Instead of putting the rules directly in the account classes, each account uses a separate strategy — like Overdraft, Minimum Balance, or Management Fee — to handle its fees. This keeps the code simple, flexible, and easy to update if bank policies change.
 
+Assignment 4: Implemented a Client Lookup GUI that allows a bank employee to search for a client, view their accounts, and apply transactions using a Qt window.
+## Graphical User Interface (Assignment 4)
+The main window, `ClientLookupWindow`, lets a user enter a client number, look up the client, and see all of their bank accounts in a table. When the user double-clicks an account, the `AccountDetailsWindow` opens and allows a deposit or withdrawal to be made.
+
+After a successful transaction, the updated balance is shown in both the details window and the main table. The new balance is also written back to `accounts.csv` using the `manage_data` module. This keeps the GUI, data loading, and bank account classes working together in a clear way.
+
+
 ## Encapsulation
 Both classes use attributes with read-only properties to protect state.
 Validation occurs in IDs, non-blank name
